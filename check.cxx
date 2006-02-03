@@ -3,7 +3,9 @@
 #include "itkCommand.h"
 #include "itkSimpleFilterWatcher.h"
 
-#include "itkImageFilter.h"
+#include "itkBinaryDilateImageFilter.h"
+#include "itkBinaryBallStructuringElement.h"
+#include "itkNeighborhood.h"
 
 
 int main(int, char * argv[])
@@ -17,15 +19,38 @@ int main(int, char * argv[])
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName( argv[1] );
 
-  typedef itk::ImageFilter< IType, IType > FilterType;
+//   typedef itk::BinaryBallStructuringElement< PType, dim > SRType;
+//   SRType kernel;
+//   kernel.SetRadius( 1 );
+//   kernel.CreateStructuringElement();
+
+  typedef itk::Neighborhood<PType, dim> SRType;
+  SRType kernel;
+  kernel.SetRadius( 2 );
+  for( SRType::Iterator kit=kernel.Begin(); kit!=kernel.End(); kit++ )
+    {
+    *kit = 0;
+    }
+  SRType::Iterator kit=kernel.Begin();
+  *kit = 1;
+/*  *(++kit) = 1;*/
+  
+  typedef itk::BinaryDilateImageFilter< IType, IType, SRType > FilterType;
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput( reader->GetOutput() );
+  filter->SetKernel( kernel );
+  filter->SetForegroundValue( 200 );
+  filter->SetBackgroundValue( 100 );
+  filter->SetBoundaryIsForeground( true );
 
-  itk::SimpleFilterWatcher watcher(filter, "filter");
+/*  itk::SimpleFilterWatcher watcher(filter, "filter");*/
+filter->Update();
 
   typedef itk::ImageFileWriter< IType > WriterType;
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput( filter->GetOutput() );
+
+  filter->SetNumberOfThreads( 1 );
   writer->SetFileName( argv[2] );
   writer->Update();
 
