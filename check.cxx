@@ -3,7 +3,7 @@
 #include "itkCommand.h"
 #include "itkSimpleFilterWatcher.h"
 
-#include "itkBinaryDilateImageFilter.h"
+#include "itkBinaryErodeImageFilter.h"
 #include "itkBinaryBallStructuringElement.h"
 #include "itkNeighborhood.h"
 
@@ -35,13 +35,13 @@ int main(int, char * argv[])
   *kit = 1;
 /*  *(++kit) = 1;*/
   
-  typedef itk::BinaryDilateImageFilter< IType, IType, SRType > FilterType;
+  typedef itk::BinaryErodeImageFilter< IType, IType, SRType > FilterType;
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput( reader->GetOutput() );
   filter->SetKernel( kernel );
   filter->SetForegroundValue( 200 );
-  filter->SetBackgroundValue( 100 );
-  filter->SetBoundaryIsForeground( true );
+  filter->SetBackgroundValue( 0 );
+  filter->SetBoundaryIsForeground( false );
 
 /*  itk::SimpleFilterWatcher watcher(filter, "filter");*/
 filter->Update();
