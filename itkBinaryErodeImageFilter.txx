@@ -446,6 +446,20 @@ BinaryErodeImageFilter< TInputImage, TOutputImage, TKernel>
       progress.CompletedPixel();
       }
     }
+
+  // now, we must to restore the background values
+  ImageRegionConstIterator<InputImageType> inIt( input, outputRegion );
+
+  for( inIt.GoToBegin(), outIt.GoToBegin(); !outIt.IsAtEnd(); ++outIt, ++inIt )
+    {
+    InputPixelType inValue = inIt.Get();
+    OutputPixelType outValue = outIt.Get();
+    if ( outValue == backgroundValue && inValue != foregroundValue )
+      { outIt.Set( static_cast<OutputPixelType>( inValue ) ); }
+    progress.CompletedPixel();
+    }
+
+
 }
 
 
