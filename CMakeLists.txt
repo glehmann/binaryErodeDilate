@@ -57,7 +57,19 @@ ENDIF(BUILD_WRAPPERS)
 #be linked to all the libraries you specified above. 
 #You can build more than one executable per project
 
-SET(CurrentExe "check")
+SET(CurrentExe "erode_1pt")
+ADD_EXECUTABLE(${CurrentExe} ${CurrentExe}.cxx)
+TARGET_LINK_LIBRARIES(${CurrentExe} ${Libraries})
+
+SET(CurrentExe "dilate_1pt")
+ADD_EXECUTABLE(${CurrentExe} ${CurrentExe}.cxx)
+TARGET_LINK_LIBRARIES(${CurrentExe} ${Libraries})
+
+SET(CurrentExe "erode")
+ADD_EXECUTABLE(${CurrentExe} ${CurrentExe}.cxx)
+TARGET_LINK_LIBRARIES(${CurrentExe} ${Libraries})
+
+SET(CurrentExe "dilate")
 ADD_EXECUTABLE(${CurrentExe} ${CurrentExe}.cxx)
 TARGET_LINK_LIBRARIES(${CurrentExe} ${Libraries})
 
@@ -69,5 +81,31 @@ TARGET_LINK_LIBRARIES(${CurrentExe} ${Libraries})
 #any tests you can comment out or delete the following line.
 # ADD_TEST(Testname ExecutableToRun arg1 arg2 arg3)
 
-ADD_TEST(Run check ${INPUT_IMAGE} out.png)
-ADD_TEST(CompareImage ${IMAGE_COMPARE} out.png ${CMAKE_SOURCE_DIR}/images/test.png)
+SET(PARAMS
+  "200-0-0"
+  "100-0-0"
+  "200-0-1"
+  "100-0-1"
+  "200-150-0"
+  "100-150-0"
+  "200-150-1"
+  "100-150-1"
+)
+
+FOREACH(param ${PARAMS})
+  STRING(REGEX REPLACE "([0-9]*)-([0-9]*)-([0-9]*)" "\\1" fg "${param}")
+  STRING(REGEX REPLACE "([0-9]*)-([0-9]*)-([0-9]*)" "\\2" bg "${param}")
+  STRING(REGEX REPLACE "([0-9]*)-([0-9]*)-([0-9]*)" "\\3" border "${param}")
+
+  ADD_TEST(Dilate-${param} dilate ${fg} ${bg} ${border} ${INPUT_IMAGE} dilate-${param}.png)
+  ADD_TEST(CompareDilate-${param} ${IMAGE_COMPARE} dilate-${param}.png ${CMAKE_SOURCE_DIR}/images/dilate-${param}.png)
+
+  ADD_TEST(Dilate1pt-${param} dilate_1pt ${fg} ${bg} ${border} ${INPUT_IMAGE} dilate_1pt-${param}.png)
+  ADD_TEST(CompareDilate1pt-${param} ${IMAGE_COMPARE} dilate_1pt-${param}.png ${CMAKE_SOURCE_DIR}/images/dilate_1pt-${param}.png)
+
+  ADD_TEST(Erode-${param} erode ${fg} ${bg} ${border} ${INPUT_IMAGE} erode-${param}.png)
+  ADD_TEST(CompareErode-${param} ${IMAGE_COMPARE} erode-${param}.png ${CMAKE_SOURCE_DIR}/images/erode-${param}.png)
+
+  ADD_TEST(Erode1pt-${param} erode_1pt ${fg} ${bg} ${border} ${INPUT_IMAGE} erode_1pt-${param}.png)
+  ADD_TEST(CompareErode1pt-${param} ${IMAGE_COMPARE} erode_1pt-${param}.png ${CMAKE_SOURCE_DIR}/images/erode_1pt-${param}.png)
+ENDFOREACH(param)
