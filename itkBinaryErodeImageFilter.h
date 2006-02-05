@@ -47,12 +47,12 @@ namespace itk
  * Processing. Vol. 9. No. 3. 2000. pp. 283-286.
  *
  * Gray scale images can be processed as binary images by selecting a
- * "DilateValue".  Pixel values matching the dilate value are
+ * "ErodeValue".  Pixel values matching the dilate value are
  * considered the "foreground" and all other pixels are
  * "background". This is useful in processing segmented images where
  * all pixels in segment #1 have value 1 and pixels in segment #2 have
  * value 2, etc. A particular "segment number" can be processed.
- * DilateValue defaults to the maximum possible value of the
+ * ErodeValue defaults to the maximum possible value of the
  * PixelType.
  *
  * The structuring element is assumed to be composed of binary values
@@ -149,13 +149,13 @@ public:
   /** Set the value in the image to consider as "foreground". Defaults to
    * maximum value of PixelType. This is an alias to the
    * ForegroundValue in the superclass. */
-  void SetDilateValue(const InputPixelType& value)
+  void SetErodeValue(const InputPixelType& value)
     { this->SetForegroundValue( value ); }
 
   /** Get the value in the image considered as "foreground". Defaults to
    * maximum value of PixelType. This is an alias to the
    * ForegroundValue in the superclass. */
-  InputPixelType GetDilateValue() const
+  InputPixelType GetErodeValue() const
     { return this->GetForegroundValue(); }
 
 protected:
