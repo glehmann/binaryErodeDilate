@@ -358,27 +358,20 @@ BinaryDilateImageFilter< TInputImage, TOutputImage, TKernel>
     IndexType index = cell.index;
     unsigned int code = cell.code;
     
-    // Force location of neighbour iterator 
-    onit +=  index - onit.GetIndex();
-
     // Thanks to code, we know the exact index of the region to paint
     typename NeighborIndexContainer::const_iterator itIndex;
     NeighborIndexContainer& indexDifferenceSet = this->GetDifferenceSet( code );
     
     bool bIsInBound;
     for( itIndex = indexDifferenceSet.begin(); itIndex != indexDifferenceSet.end(); ++itIndex )
-      { onit.SetPixel( *itIndex, foregroundValue, bIsInBound ); }
+      {
+      IndexType idx = index + *itIndex;
+      if( outputRegion.IsInside( idx ) )
+        { output->SetPixel( idx, foregroundValue ); }
+      }
     
     progress.CompletedPixel();
     }
-  
-  // Fake progress in order to complete the progress
-/*  unsigned long numberOfOutputPixels
-    = tmpRequestedRegion.GetNumberOfPixels();
-  for( i = numberOfBorderPixels; i < numberOfOutputPixels; ++i )
-    {
-    progress.CompletedPixel();
-    }*/
   
   // Paint input image translated with respect to the SE CCs vectors
   // --> "( Xb0 UNION Xb1 UNION ... Xbn )"

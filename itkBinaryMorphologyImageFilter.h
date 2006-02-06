@@ -227,7 +227,7 @@ protected:
   typedef std::vector< BorderCell > BorderCellContainer;
 
   // type definition of container of neighbourhood index
-  typedef std::vector< unsigned int > NeighborIndexContainer;
+  typedef std::vector< OffsetType > NeighborIndexContainer;
 
   // type definition of container of container of neighbourhood index
   typedef std::vector<NeighborIndexContainer> NeighborIndexContainerContainer;
