@@ -216,16 +216,6 @@ protected:
    * input, the request is cropped by the LargestPossibleRegion. */
   void GenerateInputRequestedRegion() throw (InvalidRequestedRegionError);
   
-  // Structure for border encoding of input binarized image
-  struct BorderCell
-  {
-    IndexType index;
-    unsigned int code;
-  };
-
-  // typedef of container of border cells
-  typedef std::vector< BorderCell > BorderCellContainer;
-
   // type definition of container of neighbourhood index
   typedef std::vector< OffsetType > NeighborIndexContainer;
 
