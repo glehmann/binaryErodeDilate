@@ -1,7 +1,7 @@
 #include "itkImageFileReader.h"
 
 #include "itkBinaryDilateImageFilter.h"
-/*#include "itkBinaryErodeImageFilter.h"*/
+#include "itkBinaryErodeImageFilter.h"
 #include "itkBinaryBallStructuringElement.h"
 
 #include "itkTimeProbe.h"
@@ -34,10 +34,10 @@ int main(int, char * argv[])
   dilate->SetInput( reader->GetOutput() );
   dilate->SetKernel( kernel );
   
-/*  typedef itk::BinaryErodeImageFilter< IType, IType, KernelType > ErodeType;
+  typedef itk::BinaryErodeImageFilter< IType, IType, KernelType > ErodeType;
   ErodeType::Pointer erode = ErodeType::New();
   erode->SetInput( reader->GetOutput() );
-  erode->SetKernel( kernel );*/
+  erode->SetKernel( kernel );
   
   reader->Update();
   
@@ -51,22 +51,22 @@ int main(int, char * argv[])
   for( int b=0; b<2; b++ )
     {
     dilate->SetBoundaryIsForeground( b );
-//     erode->SetBoundaryIsForeground( b );
+    erode->SetBoundaryIsForeground( b );
 
     for( int v=100; v<=200; v+=100 )
       {
       dilate->SetForegroundValue( v );
-/*      erode->SetForegroundValue( v );*/
+      erode->SetForegroundValue( v );
   
       itk::TimeProbe etime;
       itk::TimeProbe dtime;
   
-      for( int i=0; i<1; i++ )
+      for( int i=0; i<5; i++ )
         {
         etime.Start();
-/*        erode->Update();*/
+        erode->Update();
         etime.Stop();
-/*        erode->Modified();*/
+        erode->Modified();
   
         dtime.Start();
         dilate->Update();
