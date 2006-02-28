@@ -80,6 +80,10 @@ To improve the performance, the output image is no more created with an output
 iterator - the iterator is really inefficient in that case, because it copy all the neighbor pixels
 in a buffer, while the filter need to access a small number of those pixels.
 
+Padding image has been tested to avoid border tests. This method give only small
+performance improvement, and highly increase the memory needed by the filter, and so
+has not been kept.
+
 \section{Performance}
 
 A timing test comparing performance on a $371 \times 371 \times 34$
@@ -104,7 +108,7 @@ yes & 200 & 11.7388 s & 17.3176 s & 10.7766 s & /\\
 
 \section{Examples}
 
-Figures \ref{dilate}, \ref{erode} and \ref{dilateerode_1pt} show some examples of
+Figures \ref{dilate}, \ref{erode}, \ref{dilateerode_1pt} and \ref{dilate-size} show some examples of
 of dilation and erosion with different structuring elements, and different parameters.
 
 \begin{figure}[htbp]
@@ -163,7 +167,7 @@ of dilation and erosion with different structuring elements, and different param
 \subfigure[radius=20]{\includegraphics[scale = 0.6]{dilate-size-020}}
 \subfigure[radius=40]{\includegraphics[scale = 0.6]{dilate-size-040}}
 \subfigure[radius=100]{\includegraphics[scale = 0.6]{dilate-size-100}}
-\caption{Dilation with disks of different size.\label{dilateerode_1pt}}
+\caption{Dilation with disks of different size.\label{dilate-size}}
 \end{center}
 \end{figure}
 
