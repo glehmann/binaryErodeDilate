@@ -105,7 +105,7 @@ FOREACH(param ${PARAMS})
   STRING(REGEX REPLACE "([0-9]*)-([0-9]*)-([0-9]*)" "\\2" bg "${param}")
   STRING(REGEX REPLACE "([0-9]*)-([0-9]*)-([0-9]*)" "\\3" border "${param}")
 
-  ADD_TEST(Dilate-${param} dilate ${fg} ${bg} ${border} ${INPUT_IMAGE} dilate-${param}.png)
+  ADD_TEST(Dilate-${param} dilate ${fg} ${bg} ${border} ${INPUT_IMAGE} dilate-${param}.png 10)
   ADD_TEST(CompareDilate-${param} ${IMAGE_COMPARE} dilate-${param}.png ${CMAKE_SOURCE_DIR}/images/dilate-${param}.png)
 
   ADD_TEST(Dilate1pt-${param} dilate_1pt ${fg} ${bg} ${border} ${INPUT_IMAGE} dilate_1pt-${param}.png)
@@ -117,3 +117,8 @@ FOREACH(param ${PARAMS})
   ADD_TEST(Erode1pt-${param} erode_1pt ${fg} ${bg} ${border} ${INPUT_IMAGE} erode_1pt-${param}.png)
   ADD_TEST(CompareErode1pt-${param} ${IMAGE_COMPARE} erode_1pt-${param}.png ${CMAKE_SOURCE_DIR}/images/erode_1pt-${param}.png)
 ENDFOREACH(param)
+
+FOREACH(s 001 002 003 004 005 006 007 008 009 010 020 030 040 050 100 500)
+  ADD_TEST(DilateSize-${s} dilate 200 0 0 ${INPUT_IMAGE} dilate-size-${s}.png ${s})
+  ADD_TEST(CompareDilateSize-${s} ${IMAGE_COMPARE} dilate-size-${s}.png ${CMAKE_SOURCE_DIR}/images/dilate-size-${s}.png)
+ENDFOREACH(s)

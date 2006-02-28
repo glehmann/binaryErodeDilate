@@ -21,7 +21,7 @@ int main(int, char * argv[])
 
   typedef itk::BinaryBallStructuringElement< PType, dim > SRType;
   SRType kernel;
-  kernel.SetRadius( 10 );
+  kernel.SetRadius( atoi(argv[6]) );
   kernel.CreateStructuringElement();
 
   typedef itk::BinaryDilateImageFilter< IType, IType, SRType > FilterType;
